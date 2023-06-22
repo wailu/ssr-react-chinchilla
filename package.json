@@ -1,0 +1,12 @@
+{
+  "name": "ssr-react-chinchilla",
+  "version": "0.1.0",
+  "description": "react ssr",
+  "main": "index.js",
+  "author": "Wai Lun Lim <42461097+wailu@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}

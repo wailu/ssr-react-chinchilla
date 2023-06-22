@@ -1,7 +1,8 @@
+import Home from "./pages/Home";
 import { createRoot } from "react-dom/client";
 
 const App = () => {
-  return <h1>Hello world!</h1>;
+  return <Home />;
 };
 
 const container = document.getElementById("root");

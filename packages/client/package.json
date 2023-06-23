@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "common": "*",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.3",
     "react": "^18.2.0",

@@ -1,20 +1,13 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+const { constants } = require("common");
 
-module.exports = {
+const { SERVER_VIEWS_DIRECTORY } = constants;
+
+const commonConfig = {
   mode: "development",
+  devtool: "source-map",
   entry: path.join(__dirname, "src/App.tsx"),
-
-  output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src/index.html"),
-      inject: "body",
-    }),
-  ],
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
@@ -31,9 +24,36 @@ module.exports = {
       },
     ],
   },
+};
+
+const serverConfig = {
+  ...commonConfig,
+  target: "node",
+  output: {
+    filename: "bundle.node.js",
+    path: SERVER_VIEWS_DIRECTORY,
+    libraryTarget: "commonjs2",
+  },
+};
+
+const clientConfig = {
+  ...commonConfig,
+  target: "web",
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src/index.html"),
+      inject: "body",
+    }),
+  ],
   devServer: {
     static: path.join(__dirname, "dist"),
     compress: true,
     port: 8000,
   },
 };
+
+module.exports = [serverConfig, clientConfig];

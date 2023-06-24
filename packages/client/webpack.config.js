@@ -24,6 +24,10 @@ const commonConfig = {
       },
     ],
   },
+  externals: {
+    react: "react",
+    "react-dom": "reactDOM",
+  },
 };
 
 const serverConfig = {

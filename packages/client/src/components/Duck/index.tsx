@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
 const Duck = () => {
-  // useEffect(() => {
-  //   setInterval(() => console.log("quack"), 5000);
-  // }, []);
+  useEffect(() => {
+    console.log("hi from duck");
+  });
 
   return <div>This is the duck component</div>;
 };

@@ -1,15 +1,33 @@
 const Koa = require("koa");
+// const render = require("koa-ejs");
 const { createElement } = require("react");
 const { renderToString } = require("react-dom/server");
-const serverBundle = require("../views/bundle.node");
+const ejs = require("ejs");
+const path = require("path");
 
 const app = new Koa();
 
 app.use(async (ctx) => {
-  const element = createElement(serverBundle.default);
-  const html = renderToString(element);
+  const page = require("../views/Home.node");
+  const pageEl = createElement(page.default);
+  const pageHtml = renderToString(pageEl);
 
-  ctx.body = html;
+  // attach a script to download js file
+  // js file should hydrate
+
+  ejs.renderFile(
+    path.resolve(__dirname, "../layout.html"),
+    {
+      body: pageHtml,
+    },
+    (err, html) => {
+      if (err) {
+        ctx.body = "Error";
+        return;
+      }
+      ctx.body = html;
+    }
+  );
 });
 
 app.listen(3000);

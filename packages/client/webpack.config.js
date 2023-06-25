@@ -7,7 +7,9 @@ const { SERVER_VIEWS_DIRECTORY } = constants;
 const commonConfig = {
   mode: "development",
   devtool: "source-map",
-  entry: path.join(__dirname, "src/App.tsx"),
+  entry: {
+    Home: path.join(__dirname, "src/pages/Home/index.tsx"),
+  },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
@@ -34,7 +36,7 @@ const serverConfig = {
   ...commonConfig,
   target: "node",
   output: {
-    filename: "bundle.node.js",
+    filename: "[name].node.js",
     path: SERVER_VIEWS_DIRECTORY,
     libraryTarget: "commonjs2",
   },
@@ -44,7 +46,7 @@ const clientConfig = {
   ...commonConfig,
   target: "web",
   output: {
-    filename: "bundle.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [

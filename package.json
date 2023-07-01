@@ -5,8 +5,20 @@
   "main": "index.js",
   "author": "Wai Lun Lim <42461097+wailu@users.noreply.github.com>",
   "license": "MIT",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ]
+  "dependencies": {
+    "css-loader": "^6.8.1",
+    "ejs": "^3.1.9",
+    "koa": "^2.14.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "webpack-cli": "^5.1.4"
+  }
 }

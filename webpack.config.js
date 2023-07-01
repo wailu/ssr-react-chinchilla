@@ -1,14 +1,14 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
-const { constants } = require("common");
 
-const { SERVER_VIEWS_DIRECTORY } = constants;
+const SERVER_VIEWS_DIRECTORY = path.resolve(__dirname, "./server/views");
+const SERVER_PUBLIC_DIRECTORY = path.resolve(__dirname, "./server/public");
 
 const commonConfig = {
   mode: "development",
   devtool: "source-map",
   entry: {
-    Home: path.join(__dirname, "src/pages/Home/index.tsx"),
+    // for each page, add an entry here
+    Home: path.join(__dirname, "./client/src/pages/Home/index.tsx"),
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
@@ -47,18 +47,7 @@ const clientConfig = {
   target: "web",
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "dist"),
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src/index.html"),
-      inject: "body",
-    }),
-  ],
-  devServer: {
-    static: path.join(__dirname, "dist"),
-    compress: true,
-    port: 8000,
+    path: SERVER_PUBLIC_DIRECTORY,
   },
 };
 

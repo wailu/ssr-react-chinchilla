@@ -26,10 +26,6 @@ const commonConfig = {
       },
     ],
   },
-  externals: {
-    react: "react",
-    "react-dom": "reactDOM",
-  },
 };
 
 const serverConfig = {
@@ -40,6 +36,10 @@ const serverConfig = {
     path: SERVER_VIEWS_DIRECTORY,
     libraryTarget: "commonjs2",
   },
+  externalsType: "commonjs",
+  externals: {
+    react: "react",
+  },
 };
 
 const clientConfig = {
@@ -48,6 +48,11 @@ const clientConfig = {
   output: {
     filename: "[name].js",
     path: SERVER_PUBLIC_DIRECTORY,
+    library: ["pages", "[name]"],
+    libraryTarget: "umd",
+  },
+  externals: {
+    react: "React",
   },
 };
 

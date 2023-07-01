@@ -1,4 +1,14 @@
-/******/ (() => { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("React"));
+	else if(typeof define === 'function' && define.amd)
+		define(["React"], factory);
+	else if(typeof exports === 'object')
+		exports["pages"] = factory(require("React"));
+	else
+		root["pages"] = root["pages"] || {}, root["pages"]["Home"] = factory(root["React"]);
+})(self, (__WEBPACK_EXTERNAL_MODULE_react__) => {
+return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
@@ -1364,11 +1374,11 @@ exports["default"] = Duck;
 
 /***/ "react":
 /*!************************!*\
-  !*** external "react" ***!
+  !*** external "React" ***!
   \************************/
 /***/ ((module) => {
 
-module.exports = react;
+module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
 
 /***/ })
 
@@ -1417,6 +1427,8 @@ exports["default"] = Home;
 
 })();
 
+/******/ 	return __webpack_exports__;
 /******/ })()
 ;
+});
 //# sourceMappingURL=Home.js.map

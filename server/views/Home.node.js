@@ -1352,10 +1352,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 var react_1 = __webpack_require__(/*! react */ "react");
 var Duck = function () {
+    var _a = (0, react_1.useState)(0), count = _a[0], setCount = _a[1];
     (0, react_1.useEffect)(function () {
-        console.log("hi from duck");
-    });
-    return (0, jsx_runtime_1.jsx)("div", { children: "This is the duck component" });
+        var id = setInterval(function () {
+            console.log("hi from duck");
+            setCount(function (count) { return count + 1; });
+        }, 1000);
+        return function () { return clearInterval(id); };
+    }, []);
+    return (0, jsx_runtime_1.jsxs)("div", { children: ["This is the duck component. count: ", count] });
 };
 exports["default"] = Duck;
 

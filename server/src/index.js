@@ -1,11 +1,11 @@
 const Koa = require("koa");
 const Router = require("@koa/router");
-const serve = require("koa-static");
-const mount = require("koa-mount");
 const { createElement } = require("react");
 const { renderToString } = require("react-dom/server");
 const ejs = require("ejs");
 const path = require("path");
+
+const port = 3000;
 
 const app = new Koa();
 const router = new Router();
@@ -20,26 +20,29 @@ router.get("/", (ctx) => {
     {
       body: pageHtml,
       hydrate: `
-  <script>
-    if (window.pages === undefined || window.pages.Home === undefined) {
-      const scriptElement = document.createElement("script");
-      scriptElement.src = "http://localhost:3000/public/Home.js";
-      const scriptLoaded = new Promise((resolve, reject) => {
-        scriptElement.onload = resolve;
-        scriptElement.onerror = reject;
-      });
-      document.body.appendChild(scriptElement);
-      scriptLoaded
-        .then(() => {
-          const Home = window.pages.Home.default;
-          ReactDOM.hydrateRoot(
-            document.getElementById("root"),
-            React.createElement(Home)
-          );
-        })
-        .finally(() => scriptElement.remove());
-    }
-  </script>
+    <script>
+      const hydratePage = async () => {
+        const [{ hydrateAtRoot }, component] = await Promise.all([
+          window.provider.get("utils"),
+          window.provider.get("Home"),
+        ]).then(([f, g]) => [f(), g()]);
+        hydrateAtRoot(component.default);
+      };
+      if (!window.provider) {
+        const scriptEle = document.createElement("script");
+        scriptEle.src = "http://localhost:3001/remoteEntry.js";
+        const scriptLoaded = new Promise((resolve, reject) => {
+          scriptEle.onload = resolve;
+          scriptEle.onerror = reject;
+        });
+        document.body.appendChild(scriptEle);
+        scriptLoaded
+          .then(() => hydratePage())
+          .finally(() => scriptEle.remove());
+      } else {
+        hydratePage();
+      }
+    </script>
     `,
     },
     (err, html) => {
@@ -52,7 +55,6 @@ router.get("/", (ctx) => {
   );
 });
 
-app.use(mount("/public", serve(path.resolve(__dirname, "../public"))));
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(3000);
+app.listen(port, () => console.log(`Server listening on port ${port}`));

@@ -1,15 +1,12 @@
 const path = require("path");
+const { ModuleFederationPlugin } = require("webpack").container;
 
 const SERVER_VIEWS_DIRECTORY = path.resolve(__dirname, "./server/views");
-const SERVER_PUBLIC_DIRECTORY = path.resolve(__dirname, "./server/public");
+const CLIENT_BUILD_DIRECTORY = path.resolve(__dirname, "./client/build");
 
 const commonConfig = {
   mode: "development",
   devtool: "source-map",
-  entry: {
-    // for each page, add an entry here
-    Home: path.join(__dirname, "./client/src/pages/Home/index.tsx"),
-  },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
@@ -31,6 +28,10 @@ const commonConfig = {
 const serverConfig = {
   ...commonConfig,
   target: "node",
+  entry: {
+    // for each page, add an entry here
+    Home: path.join(__dirname, "./client/src/pages/Home/index.tsx"),
+  },
   output: {
     filename: "[name].node.js",
     path: SERVER_VIEWS_DIRECTORY,
@@ -45,15 +46,23 @@ const serverConfig = {
 const clientConfig = {
   ...commonConfig,
   target: "web",
+  entry: {},
   output: {
     filename: "[name].js",
-    path: SERVER_PUBLIC_DIRECTORY,
+    path: CLIENT_BUILD_DIRECTORY,
     library: ["pages", "[name]"],
     libraryTarget: "umd",
   },
-  externals: {
-    react: "React",
-  },
+  plugins: [
+    new ModuleFederationPlugin({
+      name: "provider",
+      filename: "remoteEntry.js",
+      exposes: {
+        utils: path.join(__dirname, "./client/src/utils/index.ts"),
+        Home: path.join(__dirname, "./client/src/pages/Home/index.tsx"),
+      },
+    }),
+  ],
 };
 
 module.exports = [serverConfig, clientConfig];

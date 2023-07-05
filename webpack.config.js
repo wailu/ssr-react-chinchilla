@@ -31,6 +31,7 @@ const serverConfig = {
   entry: {
     // for each page, add an entry here
     Home: path.join(__dirname, "./client/src/pages/Home/index.tsx"),
+    About: path.join(__dirname, "./client/src/pages/About/index.tsx"),
   },
   output: {
     filename: "[name].node.js",
@@ -60,6 +61,7 @@ const clientConfig = {
       exposes: {
         utils: path.join(__dirname, "./client/src/utils/index.ts"),
         Home: path.join(__dirname, "./client/src/pages/Home/index.tsx"),
+        About: path.join(__dirname, "./client/src/pages/About/index.tsx"),
       },
     }),
   ],

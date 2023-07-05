@@ -19,28 +19,17 @@ router.get("/", (ctx) => {
     path.resolve(__dirname, "../layout.html"),
     {
       body: pageHtml,
+      provider: '<script src="http://localhost:3001/remoteEntry.js"></script>',
       hydrate: `
     <script>
-      const hydratePage = async () => {
-        const [{ hydrateAtRoot }, component] = await Promise.all([
-          window.provider.get("utils"),
-          window.provider.get("Home"),
-        ]).then(([f, g]) => [f(), g()]);
-        hydrateAtRoot(component.default);
-      };
-      if (!window.provider) {
-        const scriptEle = document.createElement("script");
-        scriptEle.src = "http://localhost:3001/remoteEntry.js";
-        const scriptLoaded = new Promise((resolve, reject) => {
-          scriptEle.onload = resolve;
-          scriptEle.onerror = reject;
-        });
-        document.body.appendChild(scriptEle);
-        scriptLoaded
-          .then(() => hydratePage())
-          .finally(() => scriptEle.remove());
-      } else {
-        hydratePage();
+      if (window.provider) {
+        (async () => {
+          const [{ hydrateAtRoot }, component] = await Promise.all([
+            window.provider.get("utils"),
+            window.provider.get("Home"),
+          ]).then(([f, g]) => [f(), g()]);
+          hydrateAtRoot(component.default);
+        })();
       }
     </script>
     `,

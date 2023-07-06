@@ -1,13 +1,14 @@
 {
   "name": "ssr-react-chinchilla",
+  "type": "module",
   "version": "0.1.0",
   "description": "react ssr",
   "main": "index.js",
   "author": "Wai Lun Lim <42461097+wailu@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf client/build server/views && webpack --config webpack.config.js",
-    "start": "yarn build && node scripts/start-servers.js"
+    "build": "rimraf client/build server/views && webpack --config webpack.config.cjs",
+    "start": "yarn build && node scripts/start-servers.cjs"
   },
   "dependencies": {
     "@koa/router": "^12.0.0",

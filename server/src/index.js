@@ -1,47 +1,35 @@
-const Koa = require("koa");
-const Router = require("@koa/router");
-const { createElement } = require("react");
-const { renderToString } = require("react-dom/server");
-const ejs = require("ejs");
-const path = require("path");
+import Koa from "koa";
+import Router from "@koa/router";
+import { createElement } from "react";
+import { renderToPipeableStream } from "react-dom/server";
+import { StaticRouter } from "react-router-dom/server.js";
+import AppView from "../views/App.js";
 
 const port = 3000;
 
 const app = new Koa();
 const router = new Router();
 
-router.get("/", (ctx) => {
-  const page = require("../views/Home.node");
-  const pageEl = createElement(page.default);
-  const pageHtml = renderToString(pageEl);
+router.get("/", async (ctx) => {
+  await new Promise(() => {
+    const clientAppEl = createElement(
+      StaticRouter,
+      { location: ctx.url },
+      createElement(AppView, null)
+    );
 
-  ejs.renderFile(
-    path.resolve(__dirname, "../layout.html"),
-    {
-      body: pageHtml,
-      provider: '<script src="http://localhost:3001/remoteEntry.js"></script>',
-      hydrate: `
-    <script>
-      if (window.provider) {
-        (async () => {
-          const [{ hydrateAtRoot }, component] = await Promise.all([
-            window.provider.get("utils"),
-            window.provider.get("Home"),
-          ]).then(([f, g]) => [f(), g()]);
-          hydrateAtRoot(component.default);
-        })();
-      }
-    </script>
-    `,
-    },
-    (err, html) => {
-      if (err) {
-        ctx.body = "Error";
-        return;
-      }
-      ctx.body = html;
-    }
-  );
+    const stream = renderToPipeableStream(clientAppEl, {
+      bootstrapScripts: ["http://localhost:3001/bootstrap.js"],
+      onShellReady() {
+        ctx.type = "text/html";
+        ctx.status = 200;
+        stream.pipe(ctx.res);
+      },
+      onError(err) {
+        console.log("something went wrong!!!", err);
+      },
+    });
+  });
 });
 
 app.use(router.routes()).use(router.allowedMethods());

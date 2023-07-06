@@ -1,8 +1,12 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
-const Home = lazy(() => import("./pages/Home"));
-const About = lazy(() => import("./pages/About"));
+const Home = lazy(
+  () => import(/* webpackChunkName: "page_home" */ "./pages/Home")
+);
+const About = lazy(
+  () => import(/* webpackChunkName: "page_about" */ "./pages/About")
+);
 
 const App = () => {
   return (

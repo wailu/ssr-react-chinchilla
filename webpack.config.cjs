@@ -51,6 +51,7 @@ const clientConfig = {
   target: "web",
   output: {
     filename: "[name].js",
+    chunkFilename: "[name].chunk.js",
     path: CLIENT_BUILD_DIRECTORY,
     library: ["pages", "[name]"],
     libraryTarget: "umd",

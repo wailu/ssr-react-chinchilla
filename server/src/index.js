@@ -19,7 +19,10 @@ router.get("/", async (ctx) => {
     );
 
     const stream = renderToPipeableStream(clientAppEl, {
-      bootstrapScripts: ["http://localhost:3001/bootstrap.js"],
+      bootstrapScripts: [
+        "http://localhost:3001/bootstrap.js",
+        "http://localhost:3001/page_home.chunk.js",
+      ],
       onShellReady() {
         ctx.type = "text/html";
         ctx.status = 200;

@@ -1,40 +1,20 @@
 import Koa from "koa";
-import Router from "@koa/router";
-import { createElement } from "react";
-import { renderToPipeableStream } from "react-dom/server";
-import { StaticRouter } from "react-router-dom/server.js";
-import AppView from "../views/App.js";
+import serve from "koa-static";
+import mount from "koa-mount";
+import router from "./router.js";
+import config from "../../constants.cjs";
 
+const { CLIENT_BUILD_DIRECTORY, STATIC_BASE_PATH } = config;
 const port = 3000;
 
 const app = new Koa();
-const router = new Router();
+const statik = new Koa();
 
-router.get("/", async (ctx) => {
-  await new Promise(() => {
-    const clientAppEl = createElement(
-      StaticRouter,
-      { location: ctx.url },
-      createElement(AppView, null)
-    );
-
-    const stream = renderToPipeableStream(clientAppEl, {
-      bootstrapScripts: [
-        "http://localhost:3001/bootstrap.js",
-        "http://localhost:3001/page_home.chunk.js",
-      ],
-      onShellReady() {
-        ctx.type = "text/html";
-        ctx.status = 200;
-        stream.pipe(ctx.res);
-      },
-      onError(err) {
-        console.log("something went wrong!!!", err);
-      },
-    });
-  });
-});
+statik.use(serve(CLIENT_BUILD_DIRECTORY));
 
 app.use(router.routes()).use(router.allowedMethods());
+app.use(mount(STATIC_BASE_PATH, statik));
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
+
+export default app;

@@ -1,20 +1,16 @@
 const path = require("path");
-
-const SERVER_VIEWS_DIRECTORY = path.resolve(__dirname, "./server/views");
-const CLIENT_BUILD_DIRECTORY = path.resolve(__dirname, "./client/build");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const {
+  SERVER_VIEWS_DIRECTORY,
+  CLIENT_BUILD_DIRECTORY,
+  STATIC_BASE_PATH,
+} = require("./constants.cjs");
 
 const commonConfig = {
   mode: "development",
   devtool: "source-map",
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
-  },
-  entry: {
-    bootstrap: path.join(__dirname, "./client/src/bootstrap.tsx"),
-    App: path.join(__dirname, "./client/src/App.tsx"),
-    // for each page, add an entry here
-    Home: path.join(__dirname, "./client/src/pages/Home/index.tsx"),
-    About: path.join(__dirname, "./client/src/pages/About/index.tsx"),
   },
   module: {
     rules: [
@@ -35,6 +31,9 @@ const serverConfig = {
   ...commonConfig,
   target: "es2020",
   experiments: { outputModule: true },
+  entry: {
+    App: path.join(__dirname, "./client/src/App.tsx"),
+  },
   output: {
     filename: "[name].js",
     path: SERVER_VIEWS_DIRECTORY,
@@ -49,13 +48,17 @@ const serverConfig = {
 const clientConfig = {
   ...commonConfig,
   target: "web",
+  entry: {
+    bootstrap: path.join(__dirname, "./client/src/bootstrap.tsx"),
+    App: path.join(__dirname, "./client/src/App.tsx"),
+  },
   output: {
     filename: "[name].js",
     chunkFilename: "[name].chunk.js",
     path: CLIENT_BUILD_DIRECTORY,
-    library: ["pages", "[name]"],
-    libraryTarget: "umd",
+    publicPath: "/",
   },
+  plugins: [new WebpackManifestPlugin({ basePath: STATIC_BASE_PATH })],
 };
 
 module.exports = [serverConfig, clientConfig];

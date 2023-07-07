@@ -2,10 +2,10 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
 const Home = lazy(
-  () => import(/* webpackChunkName: "page_home" */ "./pages/Home")
+  () => import(/* webpackChunkName: "pages_home" */ "./pages/Home")
 );
 const About = lazy(
-  () => import(/* webpackChunkName: "page_about" */ "./pages/About")
+  () => import(/* webpackChunkName: "pages_about" */ "./pages/About")
 );
 
 const App = () => {

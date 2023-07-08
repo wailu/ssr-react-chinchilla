@@ -1,12 +1,7 @@
 const path = require("path");
-const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
-const {
-  SERVER_VIEWS_DIRECTORY,
-  CLIENT_BUILD_DIRECTORY,
-  STATIC_BASE_PATH,
-} = require("./constants.cjs");
+const { CLIENT_BUILD_DIRECTORY, STATIC_BASE_PATH } = require("./constants.cjs");
 
-const commonConfig = {
+module.exports = {
   mode: "development",
   devtool: "source-map",
   resolve: {
@@ -25,28 +20,6 @@ const commonConfig = {
       },
     ],
   },
-};
-
-const serverConfig = {
-  ...commonConfig,
-  target: "es2020",
-  experiments: { outputModule: true },
-  entry: {
-    App: path.join(__dirname, "./client/src/App.tsx"),
-  },
-  output: {
-    filename: "[name].js",
-    path: SERVER_VIEWS_DIRECTORY,
-    libraryTarget: "module",
-  },
-  externals: {
-    react: "react",
-    "react-router-dom": "react-router-dom",
-  },
-};
-
-const clientConfig = {
-  ...commonConfig,
   target: "web",
   entry: {
     bootstrap: path.join(__dirname, "./client/src/bootstrap.tsx"),
@@ -56,9 +29,6 @@ const clientConfig = {
     filename: "[name].js",
     chunkFilename: "[name].chunk.js",
     path: CLIENT_BUILD_DIRECTORY,
-    publicPath: "/",
+    publicPath: STATIC_BASE_PATH,
   },
-  plugins: [new WebpackManifestPlugin({ basePath: STATIC_BASE_PATH })],
 };
-
-module.exports = [serverConfig, clientConfig];

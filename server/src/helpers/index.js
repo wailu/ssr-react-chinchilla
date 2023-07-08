@@ -1,9 +1,9 @@
 import { createElement } from "react";
 import { renderToPipeableStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.js";
-import AppView from "../../views/App.js";
+import App from "#client/build/App.node.mjs";
 
-const AppViewEl = createElement(AppView, null);
+const AppViewEl = createElement(App, null);
 
 export const createPageStream = (additionalBootstrapScripts = []) => {
   return (ctx) =>

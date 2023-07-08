@@ -7,13 +7,18 @@
   "author": "Wai Lun Lim <42461097+wailu@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf client/build server/views && webpack --config webpack.config.cjs",
+    "build": "rimraf client/build && node scripts/build-files.cjs",
     "start": "yarn build && node scripts/start-servers.cjs"
+  },
+  "imports": {
+    "#client/*": "./client/*",
+    "#server/*": "./server/*",
+    "#constants": "./constants.cjs"
   },
   "dependencies": {
     "@koa/router": "^12.0.0",
     "css-loader": "^6.8.1",
-    "ejs": "^3.1.9",
+    "esbuild": "^0.18.11",
     "koa": "^2.14.2",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
@@ -24,13 +29,11 @@
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
-    "webpack": "^5.88.1",
-    "webpack-manifest-plugin": "^5.0.0"
+    "webpack": "^5.88.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "serve": "^14.2.0",
     "webpack-cli": "^5.1.4"
   }
 }

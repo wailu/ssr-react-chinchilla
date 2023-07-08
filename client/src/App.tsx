@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 const Home = lazy(
@@ -9,6 +9,10 @@ const About = lazy(
 );
 
 const App = () => {
+  useEffect(() => {
+    console.log("App mounted");
+  }, []);
+
   return (
     <html>
       <head>

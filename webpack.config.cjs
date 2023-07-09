@@ -23,7 +23,6 @@ module.exports = {
   target: "web",
   entry: {
     bootstrap: path.join(__dirname, "./client/src/bootstrap.tsx"),
-    App: path.join(__dirname, "./client/src/App.tsx"),
   },
   output: {
     filename: "[name].js",

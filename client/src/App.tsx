@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import "./App.css";
 
 const Home = lazy(
   () => import(/* webpackChunkName: "pages_home" */ "./pages/Home")

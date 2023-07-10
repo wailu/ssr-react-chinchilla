@@ -11,7 +11,11 @@ const Duck = () => {
     return () => clearInterval(id);
   }, []);
 
-  return <div>This is the duck component. count: {count}</div>;
+  return (
+    <div className="w-80 bg-red-200">
+      This is the duck component. count: {count}
+    </div>
+  );
 };
 
 export default Duck;
